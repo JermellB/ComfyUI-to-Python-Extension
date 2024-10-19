@@ -2,6 +2,7 @@ import os
 import sys
 
 from subprocess import Popen, check_output, PIPE
+from security import safe_command
 
 requirements = open(os.path.join(os.path.dirname(__file__), "requirements.txt")).read().split("\n")
 
@@ -15,6 +16,6 @@ installed_packages = set([package.split(" ")[0].lower() for package in installed
 for requirement in requirements:
     if requirement.lower() not in installed_packages:
         print(f"Installing requirements...")
-        Popen([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], stdout=PIPE, stderr=PIPE, cwd=os.path.dirname(__file__)).communicate()
+        safe_command.run(Popen, [sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], stdout=PIPE, stderr=PIPE, cwd=os.path.dirname(__file__)).communicate()
         print(f"Installed.")
         break
