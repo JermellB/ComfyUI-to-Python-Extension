@@ -3,7 +3,6 @@ import glob
 import inspect
 import json
 import os
-import random
 import sys
 import re
 from typing import Dict, List, Any, Callable, Tuple, TextIO
@@ -19,6 +18,7 @@ from comfyui_to_python_utils import (
     add_extra_model_paths,
     get_value_at_index,
 )
+import secrets
 
 add_comfyui_directory_to_sys_path()
 from nodes import NODE_CLASS_MAPPINGS
@@ -256,10 +256,10 @@ class CodeGenerator:
                 "hidden" in input_types.keys()
                 and "unique_id" in input_types["hidden"].keys()
             ):
-                inputs["unique_id"] = random.randint(1, 2**64)
+                inputs["unique_id"] = secrets.SystemRandom().randint(1, 2**64)
             elif class_def_params is not None:
                 if "unique_id" in class_def_params:
-                    inputs["unique_id"] = random.randint(1, 2**64)
+                    inputs["unique_id"] = secrets.SystemRandom().randint(1, 2**64)
 
             # Create executed variable and generate code
             executed_variables[idx] = f"{self.clean_variable_name(class_type)}_{idx}"
